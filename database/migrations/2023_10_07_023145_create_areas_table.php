@@ -19,6 +19,9 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+        Artisan::call('db:seed', [
+            '--class' => 'AreaSeeder'
+        ]);
     }
 
     /**

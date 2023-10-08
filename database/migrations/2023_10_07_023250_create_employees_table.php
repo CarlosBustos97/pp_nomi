@@ -16,13 +16,13 @@ return new class extends Migration
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('birth_city_id');
-            $table->unsignedBigInteger('manager_id');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('manager_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('area_id');
             $table->string('first_name', 50);
             $table->string('last_name', 100);
             $table->bigInteger('identification')->unique();
-            $table->text('address');
+            $table->text('address')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

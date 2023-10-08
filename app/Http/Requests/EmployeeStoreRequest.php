@@ -13,7 +13,7 @@ class EmployeeStoreRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -33,5 +33,15 @@ class EmployeeStoreRequest extends FormRequest
             'last_name'         => 'required|max:100',
             'identification'    => 'required|integer',
          ];
+    }
+
+    public function messages(){
+        return [
+            'position_id.required'      => __('validation.required'),
+            'birth_city_id.required'    => __('validation.required'),
+            'manager_id.exists'         => __('validation.required'),
+            'user_id.exists'            => __('validation.required'),
+            'area_id.required'          => __('validation.required')
+        ];
     }
 }

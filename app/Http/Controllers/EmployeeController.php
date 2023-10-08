@@ -7,6 +7,7 @@ use App\Models\Employee;
 use Illuminate\Http\Request;
 use App\Models\EmployeePosition;
 use App\Http\Requests\EmployeeStoreRequest;
+use Illuminate\Http\Response;
 
 class EmployeeController extends Controller
 {
@@ -39,11 +40,16 @@ class EmployeeController extends Controller
     }
 
     public function show( Employee $employee ){
-        $employee = $this->employee->getData($employee->id);
-        return response()->json($employee, Response::HTTP_OK);
+        try {
+            $employee = $this->employee->getData($employee->id);
+            return response()->json($employee, Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return response()->json($request, Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
-    public function create( EmployeeStoreRequest $request ){
+    public function create_employee( Request $request ){
+        dd($request);
         $log = $this->log->counstructLog('App\Models\Employee', 'store', $request);
         try {
             $store = DB::transaction(function () use($request){
@@ -58,7 +64,7 @@ class EmployeeController extends Controller
             });
             $log['detail'] = 'Guardando empleado';
             $this->log->saveOrReplace( $log );
-            return response()->json($store, Response::HTTP_CREATED);
+            return response()->json($store, Response::HTTP_INTERNAL_SERVER_ERROR);
         } catch (\Exception $e) {
             $log['detail'] = 'Creando empleado - ' . json_encode($e->getMessage());
             $log['status'] = Constant::FAIL;
@@ -89,6 +95,7 @@ class EmployeeController extends Controller
     }
 
     public function destroy( Employee $employee ){
+        dd($employee);
         $log = $this->log->counstructLog('App\Models\Employee', 'delete', $employee, Employee::class, $employee->id);
         try {
             $this->employee->deleteData($employee->id);

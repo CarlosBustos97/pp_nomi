@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Database\Traits\Database;
 use App\Traits\Database;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
@@ -52,12 +52,12 @@ class User extends Authenticatable
         return $this->persistIndex( User::class );
     }
 
-        public function getData( $id )
+    public function getData( $id )
     {
         return $this->persistData( User::class, $id );
     }
 
-        public function createData( Array $data )
+    public function createData( Array $data )
     {
         return $this->persistCreate( User::class, $data );
     }
@@ -67,8 +67,12 @@ class User extends Authenticatable
         return $this->persistUpdate( User::class, $data, $id );
     }
 
-        public function deleteData( $id )
+    public function deleteData( $id )
     {
         return $this->persistDelete( User::class, $id );
+    }
+
+    public static function generateVerificationToken(){
+        return Str::random(32);
     }
 }

@@ -21,7 +21,7 @@ Route::get('/home',[HomeController::class, 'index'])->name('home');
 Route::prefix('employees')->group(function(){
     Route::get('/', [EmployeeController::class, 'index'])->name('employees.index');
     Route::get('{employee}', [EmployeeController::class, 'show'])->name('employees.show');
-    Route::post('/', [EmployeeController::class, 'create'])->name('employees.store');
-    Route::put('{employee}', [EmployeeController::class, 'update'])->name('employees.update');
+    Route::post('/create', [EmployeeController::class, 'create_employee'])->name('employees.store');
+    Route::patch('{employee}', [EmployeeController::class, 'update'])->name('employees.update');
     Route::delete('{employee}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
 });

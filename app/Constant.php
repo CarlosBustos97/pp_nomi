@@ -1,4 +1,5 @@
 <?php
+namespace App;
 /**
 *Constant
 */
@@ -17,4 +18,6 @@ class Constant{
 
     const DONE = 1;
     const FAIL = 0;
+
+    const MAX_INDEX_DATA = 50;
 }
