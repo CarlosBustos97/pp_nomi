@@ -14,9 +14,9 @@ class Position extends Model
         'name'
     ];
 
-    public function employeePositions()
+    public function employees()
     {
-        return $this->hasMany(EmployeePosition::class, 'position_id', 'id');
+        return $this->hasMany(Employee::class, 'position_id', 'id');
     }
 
     public function indexData()

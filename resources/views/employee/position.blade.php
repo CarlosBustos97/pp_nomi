@@ -11,10 +11,10 @@
         <thead>
             <th>Nombre</th>
             <th>Identificación</th>
-            <th>Dirección</th>
-            <th>Teléfono</th>
-            <th>Ciuadad</th>
-            <th>Departamento</th>
+            <th>Area</th>
+            <th>Cargo</th>
+            <th>Rol</th>
+            <th>Jefe</th>
             <th>Acciones</th>
 
         </thead>
@@ -23,10 +23,14 @@
                 <tr>
                     <td> {{ $employee->name }}</td>
                     <td> {{ $employee->identification }}</td>
-                    <td> {{ $employee->addres }}</td>
-                    <td> {{ $employee->phone }}</td>
-                    <td> {{ $employee->city->name }}</td>
-                    <td> {{ $employee->city->department->name }}</td>
+                    <td> {{ $employee->area->name }}</td>
+                    <td> {{ $employee->position->name }}</td>
+                    <td>
+                        @foreach ($employee->employeeRoles as $role)
+                            {{ $role->role->name }}/
+                        @endforeach
+                    </td>
+                    <td> {{ ($employee->manager) ? $employee->manager->name : '' }}</td>
                     <td></td>
                 </tr>
 

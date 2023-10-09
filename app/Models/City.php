@@ -16,7 +16,7 @@ class City extends Model
         'department_id'
     ];
 
-    public function Department(){
+    public function department(){
         return $this->belongsTo(Department::class, 'department_id', 'id');
     }
 

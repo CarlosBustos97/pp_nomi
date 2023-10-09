@@ -14,6 +14,11 @@ class Role extends Model
         'name'
     ];
 
+    public function employeeRoles()
+    {
+        return $this->hasMany(employeeRole::class, 'role_id', 'id');
+    }
+
     public function indexData()
     {
         return $this->persistIndex( Role::class );

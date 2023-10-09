@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Log as Locallog;
 use App\Models\Employee;
 use Illuminate\Http\Request;
-use App\Models\EmployeePosition;
+use App\Models\EmployeeRole;
 use App\Http\Requests\EmployeeStoreRequest;
 use Illuminate\Http\Response;
 
@@ -17,9 +17,9 @@ class EmployeeController extends Controller
     protected $employee;
 
     /**
-     * @var EmployeePosition
+     * @var EmployeeRole
     */
-    protected $employee_position;
+    protected $employee_role;
 
     /**
      * @var Locallog
@@ -28,12 +28,12 @@ class EmployeeController extends Controller
 
     public function __construct(){
         $this->employee = new Employee();
-        $this->employee_position = new EmployeePosition();
+        $this->employee_role = new EmployeeRole();
         $this->log = new Locallog();
     }
 
     public function index(){
-        $employees = $this->employee->indexData()->load('position', 'city', 'manager', 'area');
+        $employees = $this->employee->indexData()->load('city.department');
         return view('employee.index',[
             'employees' => $employees
         ]);
@@ -48,16 +48,15 @@ class EmployeeController extends Controller
         }
     }
 
-    public function create_employee( Request $request ){
-        dd($request);
+    public function create( Request $request ){
         $log = $this->log->counstructLog('App\Models\Employee', 'store', $request);
         try {
             $store = DB::transaction(function () use($request){
                 $employee = $this->employee->createData($request->validate());
                 if($employee){
-                    $this->employee_position->createData([
-                        'employee_id' => $employee,
-                        'position_id' => $request->position_id
+                    $this->employee_role->createData([
+                        'employee_id' => $employee->id,
+                        'role_id' => $request->role_id
                     ]);
                 }
                 return $employee;
@@ -95,7 +94,6 @@ class EmployeeController extends Controller
     }
 
     public function destroy( Employee $employee ){
-        dd($employee);
         $log = $this->log->counstructLog('App\Models\Employee', 'delete', $employee, Employee::class, $employee->id);
         try {
             $this->employee->deleteData($employee->id);

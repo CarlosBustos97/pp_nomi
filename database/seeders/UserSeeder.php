@@ -18,8 +18,14 @@ class UserSeeder extends Seeder
         User::insert([
             [
                 'name' => 'admin',
-                'email' =>
-                'admin@admin.com',
+                'email' => 'admin@alianza.com',
+                'password' => bcrypt(123),
+                'remember_token' => User::generateVerificationToken(),
+                'created_at' => Carbon::now()
+            ],
+            [
+                'name' => 'Carlos Bustos',
+                'email' => 'carlobustos@alianza.com',
                 'password' => bcrypt(123),
                 'remember_token' => User::generateVerificationToken(),
                 'created_at' => Carbon::now()

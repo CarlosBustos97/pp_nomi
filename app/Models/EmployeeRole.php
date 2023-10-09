@@ -6,14 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\Database;
 
-class EmployeePosition extends Model
+class EmployeeRole extends Model
 {
     use HasFactory, Database;
 
     protected $fillable = [
         'id',
         'employee_id',
-        'position_id'
+        'role_id'
     ];
 
     public function employee()
@@ -21,8 +21,8 @@ class EmployeePosition extends Model
         return $this->belongsTo(Employee::class, 'employee_id', 'id' );
     }
 
-    public function position()
+    public function role()
     {
-        return $this->belongsTo(Position::class, 'position_id', 'id' );
+        return $this->belongsTo(Role::class, 'role_id', 'id' );
     }
 }

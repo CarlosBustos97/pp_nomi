@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('ip', 45)->nullable();
             $table->text('old_data')->nullable();
             $table->text('new_data')->nullable();
-            $table->text('detail')->nullable();            
+            $table->text('detail')->nullable();
             $table->timestamps();
             $table->softDeletes();
 
@@ -37,7 +37,7 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('orders', function (Blueprint $table) {
+        Schema::table('logs', function (Blueprint $table) {
             $table->dropForeign(['user_id']);
         });
         Schema::dropIfExists('logs');

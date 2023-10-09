@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class EmployeeStoreRequest extends FormRequest
+class PositionStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -19,7 +19,7 @@ class EmployeeStoreRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, mixed>
+     * @return array
      */
     public function rules()
     {
@@ -27,11 +27,11 @@ class EmployeeStoreRequest extends FormRequest
             'id'                => 'nullable|exists:employees,id',
             'name'              => 'required|string',
             'identification'    => 'required|numeric|unique:employees,identification,except,id',
-            'cellphone'         => 'required|string',
-            'city_id'           => 'required|exists:cities,id',
-            'department_id'     => 'required|exists:departments,id',
-            'address'           => 'required|string'
-         ];
+            'area_id'           => 'required|exists:areas,id',
+            'position_id'       => 'required|exists:positions,id',
+            'role_id'           => 'required|exists:roles,id',
+            'manager_id'        => 'nullable|exists:employees,id'
+        ];
     }
 
     public function messages(){
@@ -40,11 +40,13 @@ class EmployeeStoreRequest extends FormRequest
             'name'              => __('validation.required'),
             'identification'    => __('validation.required'),
             'identification'    => __('validation.unique'),
-            'cellphone'         => __('validation.required'),
-            'city_id'           => __('validation.required'),
-            'city_id'           => __('validation.exists'),
-            'department_id'     => __('validation.required'),
-            'department_id'     => __('validation.exists'),
+            'area_id'           => __('validation.required'),
+            'area_id'           => __('validation.exists'),
+            'position_id'       => __('validation.required'),
+            'position_id'       => __('validation.exists'),
+            'role_id'           => __('validation.required'),
+            'role_id'           => __('validation.exists'),
+            'manager_id'        => __('validation.exists'),
         ];
     }
 }

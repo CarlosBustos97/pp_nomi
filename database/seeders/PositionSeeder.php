@@ -15,9 +15,10 @@ class PositionSeeder extends Seeder
      */
     public function run()
     {
-        Position::insert(
-            ['name' => 'Colaborador', 'created_at' => Carbon::now()],
-            ['name' => 'Jefe', 'created_at' => Carbon::now()]
-        );
+        Position::insert([
+            ['name' => 'Director creativo', 'created_at' => Carbon::now()],
+            ['name' => 'Desarrollador Jr', 'created_at' => Carbon::now()],
+            ['name' => 'Desarrollador Diseñador Jr', 'created_at' => Carbon::now()]
+        ]);
     }
 }

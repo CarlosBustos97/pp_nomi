@@ -12,15 +12,16 @@ class Employee extends Model
 
     protected $fillable = [
         'id',
-        'position_id',
         'birth_city_id',
         'manager_id',
         'user_id',
         'area_id',
-        'first_name',
-        'last_name',
+        'position_id',
+        'role_id',
+        'name',
         'identification',
-        'address'
+        'address',
+        'cellphone'
     ];
 
     public function city()
@@ -43,13 +44,19 @@ class Employee extends Model
         return $this->belongsTo(Area::class, 'area_id', 'id' );
     }
 
-    public function employeePositions()
+    public function position()
     {
-        return $this->hasMany(EmployeePosition::class, 'employee_id', 'id');
+        return $this->belongsTo(Position::class, 'position_id', 'id' );
+    }
+
+    public function employeeRoles()
+    {
+        return $this->hasMany(EmployeeRole::class, 'employee_id', 'id');
     }
 
     public function indexData()
     {
+        return Employee::get();
         return $this->persistIndex( Employee::class );
     }
 

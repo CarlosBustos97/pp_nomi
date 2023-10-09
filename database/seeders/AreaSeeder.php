@@ -15,11 +15,12 @@ class AreaSeeder extends Seeder
      */
     public function run()
     {
-        Area::insert(
+        Area::insert([
             ['name' => 'Marketing y estrategias', 'created_at' => Carbon::now()],
             ['name' => 'Desarrollo', 'created_at' => Carbon::now()],
             ['name' => 'TI', 'created_at' => Carbon::now()],
             ['name' => 'RRHH', 'created_at' => Carbon::now()],
-        );
+        ]);
+
     }
 }

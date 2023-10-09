@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Constant;
 
 return new class extends Migration
 {
@@ -15,22 +16,30 @@ return new class extends Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('birth_city_id');
+            $table->unsignedBigInteger('birth_city_id')->nullable();
             $table->unsignedBigInteger('manager_id')->nullable();
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->unsignedBigInteger('area_id');
-            $table->string('first_name', 50);
-            $table->string('last_name', 100);
+            $table->unsignedBigInteger('area_id')->nullable();
+            $table->unsignedBigInteger('position_id')->nullable();
+            $table->unsignedBigInteger('user_id');
+
             $table->bigInteger('identification')->unique();
-            $table->text('address')->nullable();
+            $table->string('cellphone', 15);
+            $table->text('address');
+            $table->string('name', 200);
+            $table->char('status')->default(Constant::ACTIVE);
+
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('birth_city_id')->references('id')->on('cities')->onDelete('cascade');
-            $table->foreign('manager_id')->references('id')->on('employees')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('area_id')->references('id')->on('areas')->onDelete('cascade');
+            $table->foreign('birth_city_id')->references('id');
+            $table->foreign('manager_id')->references('id');
+            $table->foreign('user_id')->references('id');
+            $table->foreign('area_id')->references('id');
+            $table->foreign('position_id')->references('id');
         });
+        // Artisan::call('db:seed', [
+        //     '--class' => 'EmployeeSeeder'
+        // ]);
     }
 
     /**
@@ -40,11 +49,14 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('orders', function (Blueprint $table) {
+        Schema::table('employees', function (Blueprint $table) {
             $table->dropForeign(['birth_city_id']);
             $table->dropForeign(['manager_id']);
             $table->dropForeign(['user_id']);
+            $table->dropForeign(['area_id']);
+            $table->dropForeign(['position_id']);
         });
+
         Schema::dropIfExists('employees');
     }
 };
