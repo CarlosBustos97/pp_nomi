@@ -23,9 +23,9 @@ return new class extends Migration
             $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
 
         });
-        // Artisan::call('db:seed', [
-        //     '--class' => 'EmployeeRoleSeeder'
-        // ]);
+        Artisan::call('db:seed', [
+            '--class' => 'EmployeeRoleSeeder'
+        ]);
     }
 
     /**

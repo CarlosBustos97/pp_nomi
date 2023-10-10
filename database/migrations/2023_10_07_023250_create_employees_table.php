@@ -31,15 +31,15 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('birth_city_id')->references('id');
-            $table->foreign('manager_id')->references('id');
-            $table->foreign('user_id')->references('id');
-            $table->foreign('area_id')->references('id');
-            $table->foreign('position_id')->references('id');
+            $table->foreign('birth_city_id')->references('id')->on('cities')->onDelete('cascade');
+            $table->foreign('manager_id')->references('id')->on('employees')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('area_id')->references('id')->on('areas')->onDelete('cascade');
+            $table->foreign('position_id')->references('id')->on('positions')->onDelete('cascade');
         });
-        // Artisan::call('db:seed', [
-        //     '--class' => 'EmployeeSeeder'
-        // ]);
+        Artisan::call('db:seed', [
+            '--class' => 'EmployeeSeeder'
+        ]);
     }
 
     /**
