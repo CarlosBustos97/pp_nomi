@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Constant;
 use App\Models\Log as Locallog;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 use App\Models\EmployeeRole;
 use App\Http\Requests\EmployeeStoreRequest;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 
 class EmployeeController extends Controller
 {
@@ -41,14 +43,14 @@ class EmployeeController extends Controller
 
     public function show( Employee $employee ){
         try {
-            $employee = $this->employee->getData($employee->id);
+            $employee = $this->employee->getData($employee->id)->load('city.department');
             return response()->json($employee, Response::HTTP_OK);
         } catch (\Exception $e) {
-            return response()->json($request, Response::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json($employee, Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
-    public function create( Request $request ){
+    public function create( EmployeeStoreRequest $request ){
         $log = $this->log->counstructLog('App\Models\Employee', 'store', $request);
         try {
             $store = DB::transaction(function () use($request){
@@ -72,14 +74,14 @@ class EmployeeController extends Controller
         }
     }
 
-    public function update( Employee $employee, Request $request ){
+    public function update( Employee $employee, EmployeeStoreRequest $request ){
         $log = $this->log->counstructLog('App\Models\Employee', 'update', $request);
         try {
             $update = DB::transaction(function () use($request, $employee){
                 $employee = $this->employee->updateData($request->validate(), $employee->id);
-                if($update){
+
                     //revisar si es necesario hacer validación de employee position exists
-                }
+
                 return $employee;
             });
             $log['detail'] = 'Actualizando empleado';
@@ -103,7 +105,7 @@ class EmployeeController extends Controller
             $log['detail'] = 'Eliminando empleado - ' . json_encode($e->getMessage());
             $log['status'] = Constant::FAIL;
             $this->log->saveOrReplace( $log );
-            return response()->json($request, Response::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json($employee, Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
     }

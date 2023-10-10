@@ -29,7 +29,7 @@ Route::prefix('employees')->group(function(){
     Route::delete('{employee}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
 });
 
-Route::prefix('position')->group(function(){
+Route::prefix('positions')->group(function(){
     Route::get('/', [PositionController::class, 'index'])->name('position.index');
     Route::get('{employee}', [PositionController::class, 'show'])->name('position.show');
     Route::post('/', [PositionController::class, 'create'])->name('position.store');
