@@ -1,5 +1,6 @@
 <?php
 
+use App\Constant;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -22,6 +23,7 @@ return new class extends Migration
             $table->text('old_data')->nullable();
             $table->text('new_data')->nullable();
             $table->text('detail')->nullable();
+            $table->char('status', 1)->default(Constant::ACTIVE);
             $table->timestamps();
             $table->softDeletes();
 

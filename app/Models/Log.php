@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Constant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\Database;
+use Illuminate\Database\QueryException;
 
 class Log extends Model
 {
@@ -68,9 +70,9 @@ class Log extends Model
      {
          return [
              'model'     => $model,
-             'user_id'   => (Auth::check() ? Auth::user()->id : 1),
+            //  'user_id'   => (Auth::check() ? Auth::user()->id : 1),
              'action'    => $action,
-             'ip'        => ($request ? $request->ip() : Log::getIP()),
+             'ip'        => (Log::getIP()),
              'old_data'  => ($request ? (( $class && $id ) ? json_encode( $class::find( $id )) : '' ) : ''),
              'new_data'  => ($request ? json_encode( $request->all() ) : ''),
              'status'    => Constant::DONE

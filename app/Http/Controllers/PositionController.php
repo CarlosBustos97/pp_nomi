@@ -9,7 +9,12 @@ use Illuminate\Http\Request;
 use App\Models\EmployeeRole;
 use App\Http\Requests\EmployeeStoreRequest;
 use App\Http\Requests\PositionStoreRequest;
+use App\Http\Requests\PositionUpdateRequest;
+use App\Models\Area;
+use App\Models\Position;
+use App\Models\Role;
 use Illuminate\Http\Response;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class PositionController extends Controller
@@ -29,16 +34,40 @@ class PositionController extends Controller
     */
     protected $log;
 
+    /**
+     * @var Role
+    */
+    protected $role;
+
+    /**
+     * @var Area
+    */
+    protected $area;
+
+    /**
+     * @var Positions
+    */
+    protected $position;
+
     public function __construct(){
         $this->employee = new Employee();
         $this->employee_role = new EmployeeRole();
         $this->log = new Locallog();
+        $this->role = new Role();
+        $this->area = new Area();
+        $this->position = new Position();
     }
 
     public function index(){
         $employees = $this->employee->indexData()->load('employeeRoles.role', 'manager', 'area', 'position');
+        $roles = $this->role->indexData();
+        $areas = $this->area->indexData();
+        $positions = $this->position->indexData();
         return view('employee.position',[
-            'employees' => $employees
+            'employees' => $employees,
+            'roles'     => $roles,
+            'areas'     => $areas,
+            'positions' => $positions
         ]);
     }
 
@@ -52,21 +81,25 @@ class PositionController extends Controller
     }
 
     public function create( PositionStoreRequest $request ){
-        $log = $this->log->counstructLog('App\Models\Employee', 'store', $request);
+        $log = Locallog::constructLog('App\Models\Employee', 'store', $request);
         try {
             $store = DB::transaction(function () use($request){
-                $employee = $this->employee->createData($request->validate());
+                $data = new Collection($request->validated());
+                $data = $data->except('role_id');
+                $employee = $this->employee->createData($data->toArray());
                 if($employee){
-                    $this->employee_role->createData([
-                        'employee_id' => $employee->id,
-                        'role_id' => $request->role_id
-                    ]);
+                    foreach( $request->role_id as $role_id ){
+                        $this->employee_role->createData([
+                            'employee_id' => $employee->id,
+                            'role_id' => $role_id
+                        ]);
+                    }
                 }
                 return $employee;
             });
             $log['detail'] = 'Guardando empleado';
             $this->log->saveOrReplace( $log );
-            return response()->json($store, Response::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json($store, Response::HTTP_CREATED);
         } catch (\Exception $e) {
             $log['detail'] = 'Creando empleado - ' . json_encode($e->getMessage());
             $log['status'] = Constant::FAIL;
@@ -75,18 +108,32 @@ class PositionController extends Controller
         }
     }
 
-    public function update( Employee $employee, PositionStoreRequest $request ){
-        $log = $this->log->counstructLog('App\Models\Employee', 'update', $request);
+    public function update( Employee $employee, PositionUpdateRequest $request ){
+        $log = Locallog::constructLog('App\Models\Employee', 'update', $request);
         try {
             $update = DB::transaction(function () use($request, $employee){
-                $employee = $this->employee->updateData($request->validate(), $employee->id);
+                $data = new Collection($request->validated());
+                $data = $data->except('role_id');
+                $employee_roles = $this->employee_role->get($employee->id);
+                foreach($employee_roles as $employee_role){
+                    $this->employee_role->deleteData($employee_role->id);
+                }
+                $employee = $this->employee->updateData($data->toArray(), $employee->id);
+                if($employee){
+                    foreach( $request->role_id as $role_id ){
+                        $this->employee_role->createData([
+                            'employee_id' => $employee->id,
+                            'role_id' => $role_id
+                        ]);
+                    }
+                }
                 return $employee;
             });
             $log['detail'] = 'Actualizando empleado';
             $this->log->saveOrReplace( $log );
             return response()->json($update, Response::HTTP_CREATED);
         } catch (\Exception $e) {
-            $log['detail'] = 'Creando empleado - ' . json_encode($e->getMessage());
+            $log['detail'] = 'Error actualizando empleado - ' . json_encode($e->getMessage());
             $log['status'] = Constant::FAIL;
             $this->log->saveOrReplace( $log );
             return response()->json($request, Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -94,7 +141,7 @@ class PositionController extends Controller
     }
 
     public function destroy( Employee $employee ){
-        $log = $this->log->counstructLog('App\Models\Employee', 'delete', $employee, Employee::class, $employee->id);
+        $log = Locallog::constructLog('App\Models\Employee', 'delete', $employee, Employee::class, $employee->id);
         try {
             $this->employee->deleteData($employee->id);
             $log['detail'] = 'Eliminando empleado';

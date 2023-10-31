@@ -24,7 +24,6 @@ class PositionStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'id'                => 'nullable|exists:employees,id',
             'name'              => 'required|string',
             'identification'    => 'required|numeric|unique:employees,identification,except,id',
             'area_id'           => 'required|exists:areas,id',
@@ -36,7 +35,6 @@ class PositionStoreRequest extends FormRequest
 
     public function messages(){
         return [
-            'id'                => __('validation.exists'),
             'name'              => __('validation.required'),
             'identification'    => __('validation.required'),
             'identification'    => __('validation.unique'),

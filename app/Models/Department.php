@@ -17,16 +17,12 @@ class Department extends Model
     ];
 
     public function cities(){
-        return $this->hasMany(City::class, 'city_id', 'id' );
+        return $this->hasMany(City::class, 'department_id', 'id' );
     }
 
-    public function pais()
+    public function country()
     {
         return $this->belongsTo(Country::class, 'country_id', 'id' );
-    }
-
-    public function departments(){
-        return $this->hasMany(Departments::class, 'country_id', 'id' );
     }
 
     public function indexData()

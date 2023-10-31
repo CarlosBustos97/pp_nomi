@@ -24,27 +24,22 @@ class EmployeeStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'id'                => 'nullable|exists:employees,id',
             'name'              => 'required|string',
             'identification'    => 'required|numeric|unique:employees,identification,except,id',
             'cellphone'         => 'required|string',
-            'city_id'           => 'required|exists:cities,id',
-            'department_id'     => 'required|exists:departments,id',
+            'birth_city_id'     => 'required|exists:cities,id',
             'address'           => 'required|string'
          ];
     }
 
     public function messages(){
         return [
-            'id'                => __('validation.exists'),
             'name'              => __('validation.required'),
             'identification'    => __('validation.required'),
             'identification'    => __('validation.unique'),
             'cellphone'         => __('validation.required'),
-            'city_id'           => __('validation.required'),
-            'city_id'           => __('validation.exists'),
-            'department_id'     => __('validation.required'),
-            'department_id'     => __('validation.exists'),
+            'birth_city_id'     => __('validation.required'),
+            'birth_city_id'     => __('validation.exists'),
         ];
     }
 }

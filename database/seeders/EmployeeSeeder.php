@@ -20,7 +20,6 @@ class EmployeeSeeder extends Seeder
                 'birth_city_id' => 1,
                 'area_id' => 1,
                 'position_id' => 1,
-                'user_id' => 2,
                 'identification' => 1234679,
                 'cellphone' => "4652358",
                 'address' => 'calle 90 #12-20',

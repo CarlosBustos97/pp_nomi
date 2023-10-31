@@ -4,6 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use App\Constant;
+use Illuminate\Support\Facades\Artisan;
 
 return new class extends Migration
 {
@@ -20,11 +21,10 @@ return new class extends Migration
             $table->unsignedBigInteger('manager_id')->nullable();
             $table->unsignedBigInteger('area_id')->nullable();
             $table->unsignedBigInteger('position_id')->nullable();
-            $table->unsignedBigInteger('user_id');
 
             $table->bigInteger('identification')->unique();
-            $table->string('cellphone', 15);
-            $table->text('address');
+            $table->string('cellphone', 15)->nullable();
+            $table->text('address')->nullable();
             $table->string('name', 200);
             $table->char('status')->default(Constant::ACTIVE);
 
@@ -33,7 +33,6 @@ return new class extends Migration
 
             $table->foreign('birth_city_id')->references('id')->on('cities')->onDelete('cascade');
             $table->foreign('manager_id')->references('id')->on('employees')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('area_id')->references('id')->on('areas')->onDelete('cascade');
             $table->foreign('position_id')->references('id')->on('positions')->onDelete('cascade');
         });
@@ -52,7 +51,6 @@ return new class extends Migration
         Schema::table('employees', function (Blueprint $table) {
             $table->dropForeign(['birth_city_id']);
             $table->dropForeign(['manager_id']);
-            $table->dropForeign(['user_id']);
             $table->dropForeign(['area_id']);
             $table->dropForeign(['position_id']);
         });

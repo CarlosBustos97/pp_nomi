@@ -16,7 +16,7 @@ class Country extends Model
     ];
 
     public function departments(){
-        return $this->hasMany(Departments::class, 'country_id', 'id' );
+        return $this->hasMany(Department::class, 'country_id', 'id' );
     }
 
     public function indexData()

@@ -101,7 +101,7 @@ trait Database
 
         }catch( QueryException $e )
         {
-            dd($e->getMessage());
+            dd($e);
             $this->logTransactions( $class, '', '', Constant::STORE, $e->getMessage(), Constant::FAIL);
             abort(500);
         }
@@ -136,6 +136,7 @@ trait Database
 
         }catch( QueryException $e )
         {
+            dd($e->getMessage());
             $this->logTransactions( $class, '', '', Constant::UPDATE, $e->getMessage(), Constant::FAIL);
             abort(500);
         }

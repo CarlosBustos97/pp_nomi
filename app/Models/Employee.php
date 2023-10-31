@@ -14,7 +14,6 @@ class Employee extends Model
         'id',
         'birth_city_id',
         'manager_id',
-        'user_id',
         'area_id',
         'position_id',
         'role_id',
@@ -34,11 +33,6 @@ class Employee extends Model
         return $this->belongsTo(Employee::class, 'manager_id', 'id' );
     }
 
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'user_id', 'id' );
-    }
-
     public function area()
     {
         return $this->belongsTo(Area::class, 'area_id', 'id' );
@@ -56,16 +50,15 @@ class Employee extends Model
 
     public function indexData()
     {
-        return Employee::get();
         return $this->persistIndex( Employee::class );
     }
 
-        public function getData( $id )
+    public function getData( $id )
     {
         return $this->persistData( Employee::class, $id );
     }
 
-        public function createData( Array $data )
+    public function createData( Array $data )
     {
         return $this->persistCreate( Employee::class, $data );
     }
@@ -75,7 +68,7 @@ class Employee extends Model
         return $this->persistUpdate( Employee::class, $data, $id );
     }
 
-        public function deleteData( $id )
+    public function deleteData( $id )
     {
         return $this->persistDelete( Employee::class, $id );
     }

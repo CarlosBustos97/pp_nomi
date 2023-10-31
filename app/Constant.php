@@ -14,7 +14,7 @@ class Constant{
     const SHOW = 'Show';
     const STORE = 'Store';
     const UPDATE = 'Update';
-    const DLETE = 'Delete';
+    const DELETE = 'Delete';
 
     const DONE = 1;
     const FAIL = 0;
