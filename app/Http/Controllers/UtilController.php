@@ -10,7 +10,7 @@ use Illuminate\Http\Response;
 class UtilController extends Controller
 {
     public function __construct(){
-
+        $this->middleware('auth');
     }
 
     public function getByCountry(Country $country){

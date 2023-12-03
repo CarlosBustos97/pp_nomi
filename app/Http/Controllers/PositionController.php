@@ -50,6 +50,7 @@ class PositionController extends Controller
     protected $position;
 
     public function __construct(){
+        $this->middleware('auth');
         $this->employee = new Employee();
         $this->employee_role = new EmployeeRole();
         $this->log = new Locallog();

@@ -36,6 +36,7 @@ class EmployeeController extends Controller
     protected $country;
 
     public function __construct(){
+        $this->middleware('auth');
         $this->employee = new Employee();
         $this->employee_role = new EmployeeRole();
         $this->country = new Country();

@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\UtilController;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 use Laravel\Sanctum\Http\Controllers\AuthenticatedSessionController;
 
@@ -19,8 +20,9 @@ use Laravel\Sanctum\Http\Controllers\AuthenticatedSessionController;
 |
 */
 
-Route::get('/',[HomeController::class, 'index']);
+Auth::routes();
 Route::get('/home',[HomeController::class, 'index'])->name('home');
+Route::get('/',[HomeController::class, 'index']);
 
 Route::prefix('employees')->group(function(){
     Route::get('/', [EmployeeController::class, 'index'])->name('employees.index');
@@ -42,3 +44,4 @@ Route::prefix('utils')->group(function(){
     Route::get('/departments/{country}', [UtilController::class, 'getByCountry'])->name('departments.get.country');
     Route::get('/city/{department}', [UtilController::class, 'getByDepartment'])->name('city.get.department');
 });
+
